@@ -1,7 +1,11 @@
 
 # YAETS: Yet Another Execution Tracing System
 
+[![rolling](https://github.com/fmrico/yaest/actions/workflows/rolling.yaml/badge.svg)](https://github.com/fmrico/yaest/actions/workflows/rolling.yaml)
+
 YAETS is a library designed to trace function execution in C++ asynchronously, combined with Python tools to analyze the results through Gantt charts and histograms.
+![histogram](https://github.com/user-attachments/assets/4845320f-8736-4370-9ccb-d837426bdfaa)
+![gantt](https://github.com/user-attachments/assets/754f20cd-90e6-43a9-8c18-cc523840eccb)
 
 ## Features
 
@@ -110,6 +114,10 @@ The Python script `gantt.py` allows you to visualize the traced functions as a G
     ```bash
     python3 scripts/gantt.py trace_output.log --max_traces 100
     ```
+    or altenativelly
+     ```bash
+    ros2 run yaest gantt.py trace_output.log --max_traces 100
+    ```
 
 #### Options
 
@@ -127,6 +135,11 @@ The Python script `histogram.py` analyzes the intervals between function executi
     ```bash
     python3 scripts/histogram.py trace_output.log --function example_function --bins 50
     ```
+    or altenativelly
+     ```bash
+    ros2 run yaest histogram.py trace_output.log --function example_function --bins 50
+    ```
+
 
 #### Options
 
