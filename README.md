@@ -173,6 +173,10 @@ YAETS includes unit tests to verify the functionality of the tracing library. To
     make
     ./yaets_test
     ```
+    or
+    ```bash
+    colcon test
+    ```
 
 This will run the tests in `tests/yaets_test.cpp` and verify the correctness of the tracing system.
 
