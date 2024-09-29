@@ -70,8 +70,9 @@ YAETS is a library designed to trace function execution in C++ asynchronously, c
 
 1. Clone the repository and navigate to the project directory:
     ```bash
+    cd my_ros_ws/src
     git clone https://github.com/your-repo/yaets.git
-    cd yaets
+    cd ..
     ```
 
 2. Build the library using Colcon:
