@@ -180,6 +180,128 @@ YAETS includes unit tests to verify the functionality of the tracing library. To
 
 This will run the tests in `tests/yaets_test.cpp` and verify the correctness of the tracing system.
 
+## Tracing Session
+
+We got the graphs at the initial of this document following these instructions:
+
+### Code to trace:
+
+```cpp
+#include <fstream>
+
+#include "yaets/tracing.hpp"
+
+#include "rclcpp/rclcpp.hpp"
+#include "std_msgs/msg/int32.hpp"
+
+using namespace std::chrono_literals;
+using std::placeholders::_1;
+
+
+yaets::TraceSession session("session1.log");
+
+class ProducerNode : public rclcpp::Node
+{
+public:
+  ProducerNode() : Node("producer_node")
+  {
+    pub_1_ = create_publisher<std_msgs::msg::Int32>("topic_1", 100);
+    pub_2_ = create_publisher<std_msgs::msg::Int32>("topic_2", 100);
+    timer_ = create_wall_timer(1ms, std::bind(&ProducerNode::timer_callback, this));
+  }
+
+  void timer_callback()
+  {
+    TRACE_EVENT(session);
+    message_.data += 1;
+    pub_1_->publish(message_);
+    message_.data += 1;
+    pub_2_->publish(message_);
+  }
+
+private:
+  rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr pub_1_, pub_2_;
+  rclcpp::TimerBase::SharedPtr timer_;
+  std_msgs::msg::Int32 message_;
+};
+
+class ConsumerNode : public rclcpp::Node
+{
+public:
+  ConsumerNode() : Node("consumer_node")
+  {
+    sub_2_ = create_subscription<std_msgs::msg::Int32>(
+      "topic_2", 100, std::bind(&ConsumerNode::cb_2, this, _1));
+    sub_1_ = create_subscription<std_msgs::msg::Int32>(
+      "topic_1", 100, std::bind(&ConsumerNode::cb_1, this, _1));
+ 
+    timer_ = create_wall_timer(10ms, std::bind(&ConsumerNode::timer_callback, this));
+  }
+
+  void cb_1(const std_msgs::msg::Int32::SharedPtr msg)
+  {
+    TRACE_EVENT(session);
+
+    waste_time(200us);
+  }
+
+  void cb_2(const std_msgs::msg::Int32::SharedPtr msg)
+  {
+    TRACE_EVENT(session);
+
+    waste_time(200us);
+  }
+
+  void timer_callback()
+  {
+    TRACE_EVENT(session);
+
+    waste_time(3ms);
+  }
+
+  void waste_time(const rclcpp::Duration & duration)
+  {
+    auto start = now();
+    while (now() - start < duration);
+  }
+
+private:
+  rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr sub_1_;
+  rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr sub_2_;
+  rclcpp::TimerBase::SharedPtr timer_;
+};
+
+int main(int argc, char * argv[])
+{
+  rclcpp::init(argc, argv);
+
+  auto node_pub = std::make_shared<ProducerNode>();
+  auto node_sub = std::make_shared<ConsumerNode>();
+
+  rclcpp::executors::MultiThreadedExecutor executor;
+
+  executor.add_node(node_pub);
+  executor.add_node(node_sub);
+
+  executor.spin();
+
+  rclcpp::shutdown();
+  return 0;
+}
+```
+
+### Running and getting graphs
+
+```bash
+ros2 run yaets executors
+ros2 run yaest gantt.py ./session1.log --max_trazas 200
+ros2 run yaest histogram.py ../session1.log  --funcion ConsumerNode::timer_callback --bins 40
+```
+And we get the two graphs:
+
+![histogram](https://github.com/user-attachments/assets/0f45055c-ea7a-46f3-9682-1de737b119c3)
+![gantt](https://github.com/user-attachments/assets/56ae4f04-b294-4b84-819e-b436409c7e29)
+
 ## License
 
 YAETS is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for more details.
