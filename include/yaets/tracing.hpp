@@ -61,7 +61,8 @@ struct TraceEvent
  * in a queue. It also handles the writing of the trace events to a file
  * asynchronously via a separate consumer thread.
  */
-class TraceSession {
+class TraceSession
+{
 public:
   /**
    * @brief Construct a new TraceSession object.
