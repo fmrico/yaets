@@ -8,49 +8,49 @@ import matplotlib.cm as cm
 def ns_to_ms(ns):
     return ns / 1_000_000
 
-def leer_trazas(archivo_trazas, max_trazas=None):
-    trazas = []
-    with open(archivo_trazas, 'r') as archivo:
-        for i, linea in enumerate(archivo):
-            if max_trazas and i >= max_trazas:
+def read_traces(trace_file, max_traces=None):
+    traces = []
+    with open(trace_file, 'r') as file:
+        for i, line in enumerate(file):
+            if max_traces and i >= max_traces:
                 break
-            partes = linea.split()
-            if len(partes) == 3:
-                funcion = partes[0]
-                inicio_ns = int(partes[1])
-                fin_ns = int(partes[2])
-                inicio_ms = ns_to_ms(inicio_ns)
-                duracion_ms = ns_to_ms(fin_ns - inicio_ns)
-                trazas.append((funcion, inicio_ms, duracion_ms))
-    return trazas
+            parts = line.split()
+            if len(parts) == 3:
+                function = parts[0]
+                start_ns = int(parts[1])
+                end_ns = int(parts[2])
+                start_ms = ns_to_ms(start_ns)
+                duration_ms = ns_to_ms(end_ns - start_ns)
+                traces.append((function, start_ms, duration_ms))
+    return traces
 
-def crear_diagrama_gantt(trazas):
-    funciones = list(set(funcion for funcion, _, _ in trazas))
-    colores = cm.get_cmap('tab10', len(funciones))
-    colores_por_funcion = {funcion: colores(i) for i, funcion in enumerate(funciones)}
+def create_gantt_chart(traces):
+    functions = list(set(function for function, _, _ in traces))
+    colors = cm.get_cmap('tab10', len(functions))
+    colors_by_function = {function: colors(i) for i, function in enumerate(functions)}
 
     fig, ax = plt.subplots(figsize=(10, 6))
 
-    for i, (funcion, inicio_ms, duracion_ms) in enumerate(trazas):
-        ax.barh(funcion, duracion_ms, left=inicio_ms, height=0.4, color=colores_por_funcion[funcion])
+    for i, (function, start_ms, duration_ms) in enumerate(traces):
+        ax.barh(function, duration_ms, left=start_ms, height=0.4, color=colors_by_function[function])
 
-    ax.set_xlabel('Tiempo (ms)')
-    ax.set_ylabel('Funciones')
-    ax.set_title('Diagrama de Gantt de Ejecuciones Trazadas')
+    ax.set_xlabel('Time (ms)')
+    ax.set_ylabel('Functions')
+    ax.set_title('Gantt Chart of Traced Executions')
     ax.grid(True, linestyle=':', linewidth=0.5)
 
     plt.show()
 
 def main():
-    parser = argparse.ArgumentParser(description='Generar un diagrama de Gantt a partir de un fichero de trazas.')
-    parser.add_argument('archivo_trazas', type=str, help='Fichero de trazas a procesar')
-    parser.add_argument('--max_trazas', type=int, default=None, help='Número máximo de trazas a visualizar')
+    parser = argparse.ArgumentParser(description='Generate a Gantt chart from a trace file.')
+    parser.add_argument('trace_file', type=str, help='Trace file to process')
+    parser.add_argument('--max_traces', type=int, default=None, help='Maximum number of traces to display')
 
     args = parser.parse_args()
 
-    trazas = leer_trazas(args.archivo_trazas, args.max_trazas)
+    traces = read_traces(args.trace_file, args.max_traces)
 
-    crear_diagrama_gantt(trazas)
+    create_gantt_chart(traces)
 
 if __name__ == '__main__':
     main()

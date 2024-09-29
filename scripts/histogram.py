@@ -7,57 +7,57 @@ import re
 def ns_to_ms(ns):
     return ns / 1_000_000
 
-def leer_trazas(archivo_trazas, max_trazas=None):
-    trazas = []
-    with open(archivo_trazas, 'r') as archivo:
-        for i, linea in enumerate(archivo):
-            if max_trazas and i >= max_trazas:
+def read_traces(trace_file, max_traces=None):
+    traces = []
+    with open(trace_file, 'r') as file:
+        for i, line in enumerate(file):
+            if max_traces and i >= max_traces:
                 break
-            partes = linea.split()
-            if len(partes) == 3:
-                funcion = partes[0]
-                inicio_ns = int(partes[1])
-                fin_ns = int(partes[2])
-                inicio_ms = ns_to_ms(inicio_ns)
-                fin_ms = ns_to_ms(fin_ns)
-                trazas.append((funcion, inicio_ms, fin_ms))
-    return trazas
+            parts = line.split()
+            if len(parts) == 3:
+                function = parts[0]
+                start_ns = int(parts[1])
+                end_ns = int(parts[2])
+                start_ms = ns_to_ms(start_ns)
+                end_ms = ns_to_ms(end_ns)
+                traces.append((function, start_ms, end_ms))
+    return traces
 
-def filtrar_trazas_por_funcion(trazas, funcion_objetivo):
-    return [(inicio_ms, fin_ms) for funcion, inicio_ms, fin_ms in trazas if funcion == funcion_objetivo]
+def filter_traces_by_function(traces, target_function):
+    return [(start_ms, end_ms) for function, start_ms, end_ms in traces if function == target_function]
 
-def calcular_intervalos_entre_inicios(trazas):
-    trazas_ordenadas = sorted(trazas, key=lambda x: x[0])
-    intervalos = [trazas_ordenadas[i+1][0] - trazas_ordenadas[i][0] for i in range(len(trazas_ordenadas) - 1)]
-    return intervalos
+def calculate_intervals_between_starts(traces):
+    ordered_traces = sorted(traces, key=lambda x: x[0])
+    intervals = [ordered_traces[i+1][0] - ordered_traces[i][0] for i in range(len(ordered_traces) - 1)]
+    return intervals
 
-def crear_histograma(intervalos, funcion_objetivo, num_bins):
-    plt.hist(intervalos, bins=num_bins, edgecolor='black', log=True)
-    plt.xlabel('Intervalo entre inicios (ms)')
-    plt.ylabel('Frecuencia (escala logarítmica)')
-    plt.title(f'Histograma de intervalos entre inicios de "{funcion_objetivo}"')
+def create_histogram(intervals, target_function, num_bins):
+    plt.hist(intervals, bins=num_bins, edgecolor='black', log=True)
+    plt.xlabel('Interval between starts (ms)')
+    plt.ylabel('Frequency (log scale)')
+    plt.title(f'Histogram of intervals between starts of "{target_function}"')
     plt.show()
 
 def main():
-    parser = argparse.ArgumentParser(description='Generar un diagrama de Gantt o un histograma a partir de un fichero de trazas.')
-    parser.add_argument('archivo_trazas', type=str, help='Fichero de trazas a procesar')
-    parser.add_argument('--funcion', type=str, required=True, help='Nombre de la función para el histograma')
-    parser.add_argument('--max_trazas', type=int, default=None, help='Número máximo de trazas a visualizar')
-    parser.add_argument('--bins', type=int, default=10, help='Número de bins (resolución en X) para el histograma')
+    parser = argparse.ArgumentParser(description='Generate a Gantt chart or histogram from a trace file.')
+    parser.add_argument('trace_file', type=str, help='Trace file to process')
+    parser.add_argument('--function', type=str, required=True, help='Name of the function for the histogram')
+    parser.add_argument('--max_traces', type=int, default=None, help='Maximum number of traces to display')
+    parser.add_argument('--bins', type=int, default=10, help='Number of bins (X-axis resolution) for the histogram')
 
     args = parser.parse_args()
 
-    trazas = leer_trazas(args.archivo_trazas, args.max_trazas)
+    traces = read_traces(args.trace_file, args.max_traces)
 
-    trazas_funcion = filtrar_trazas_por_funcion(trazas, args.funcion)
+    function_traces = filter_traces_by_function(traces, args.function)
 
-    if len(trazas_funcion) < 2:
-        print(f"No hay suficientes ejecuciones de la función '{args.funcion}' para calcular intervalos.")
+    if len(function_traces) < 2:
+        print(f"There are not enough executions of the function '{args.function}' to calculate intervals.")
         return
 
-    intervalos = calcular_intervalos_entre_inicios(trazas_funcion)
+    intervals = calculate_intervals_between_starts(function_traces)
 
-    crear_histograma(intervalos, args.funcion, args.bins)
+    create_histogram(intervals, args.function, args.bins)
 
 if __name__ == '__main__':
     main()
