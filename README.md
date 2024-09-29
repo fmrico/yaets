@@ -290,10 +290,19 @@ int main(int argc, char * argv[])
 }
 ```
 
+
 ### Running and getting graphs
 
+Stress the system to have significant results:
+
 ```bash
-ros2 run yaets executors
+stress-ng -c $(nproc) -t 300 # In terminal 1
+ros2 run yaets executors     # In terminal 2
+```
+
+Stop both processes and
+
+```bash
 ros2 run yaest gantt.py ./session1.log --max_trazas 200
 ros2 run yaest histogram.py ../session1.log  --funcion ConsumerNode::timer_callback --bins 40
 ```
