@@ -45,7 +45,7 @@ YAETS is a library designed to trace function execution in C++ asynchronously, c
 - **Python 3.6+** for running the scripts
 - **Matplotlib** for visualizing data in Python
 
-### Building the C++ Library
+### Building the C++ Library without ROS
 
 1. Clone the repository and navigate to the project directory:
     ```bash
@@ -64,6 +64,19 @@ YAETS is a library designed to trace function execution in C++ asynchronously, c
 3. Install the library:
     ```bash
     sudo make install
+    ```
+
+### Building the C++ Library with ROS 2
+
+1. Clone the repository and navigate to the project directory:
+    ```bash
+    git clone https://github.com/your-repo/yaets.git
+    cd yaets
+    ```
+
+2. Build the library using Colcon:
+    ```bash
+    colcon build
     ```
 
 ## Usage
