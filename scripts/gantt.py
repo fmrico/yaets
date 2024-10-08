@@ -14,16 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 import argparse
-
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
-
+from collections import defaultdict
 
 def ns_to_ms(ns):
     return ns / 1_000_000
-
 
 def read_traces(trace_file, max_traces=None):
     traces = []
@@ -41,25 +38,41 @@ def read_traces(trace_file, max_traces=None):
                 traces.append((function, start_ms, duration_ms))
     return traces
 
+# Function to split Y-axis labels based on "::" delimiter
+def split_labels_by_delimiter(labels, delimiter="::"):
+    return [label.replace(delimiter, "\n") for label in labels]
 
 def create_gantt_chart(traces):
-    functions = list({function for function, _, _ in traces})
+    # Group traces by function
+    grouped_traces = defaultdict(list)
+    for function, start_ms, duration_ms in traces:
+        grouped_traces[function].append((start_ms, duration_ms))
+
+    # Prepare function names and colors
+    functions = list(grouped_traces.keys())
     colors = cm.get_cmap('tab10', len(functions))
-    colors_by_function = {function: colors(i) for i, function in enumerate(functions)}
+    colors_by_function = {function: colors(i / len(functions)) for i, function in enumerate(functions)}
 
     fig, ax = plt.subplots(figsize=(10, 6))
 
-    for i, (function, start_ms, duration_ms) in enumerate(traces):
-        ax.barh(function, duration_ms, left=start_ms, height=0.4,
-                color=colors_by_function[function])
+    # Plot each function on a separate row
+    for i, function in enumerate(functions):
+        for start_ms, duration_ms in grouped_traces[function]:
+            ax.barh(i, duration_ms, left=start_ms, height=0.4, color=colors_by_function[function])
 
-    ax.set_xlabel('Time (ms)')
-    ax.set_ylabel('Functions')
-    ax.set_title('Gantt Chart of Traced Executions')
+    # Apply labels
+    ax.set_xlabel('Time (ms)', fontsize=24)
+    ax.set_title('Gantt Chart of Traced Executions', fontsize=28)
+
+    # Split function names by "::" and set them as Y-tick labels
+    split_labels = split_labels_by_delimiter(functions)
+    ax.set_yticks(range(len(split_labels)))
+    ax.set_yticklabels(split_labels, fontsize=18)
+
     ax.grid(True, linestyle=':', linewidth=0.5)
 
+    plt.xticks(fontsize=18)  # X-axis tick labels
     plt.show()
-
 
 def main():
     parser = argparse.ArgumentParser(description='Generate a Gantt chart from a trace file.')
@@ -72,7 +85,6 @@ def main():
     traces = read_traces(args.trace_file, args.max_traces)
 
     create_gantt_chart(traces)
-
 
 if __name__ == '__main__':
     main()
