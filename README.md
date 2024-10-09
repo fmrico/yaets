@@ -305,7 +305,7 @@ Stop both processes and
 
 ```bash
 ros2 run yaest gantt.py ./session1.log --max_trazas 200
-ros2 run yaest histogram.py ../session1.log  --funcion ConsumerNode::timer_callback --bins 40
+ros2 run yaest histogram.py ../session1.log  --function ConsumerNode::timer_callback --bins 40
 ```
 And we get the two graphs:
 
