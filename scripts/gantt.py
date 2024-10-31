@@ -62,16 +62,15 @@ def create_gantt_chart(traces):
         for start_ms, duration_ms in grouped_traces[function]:
             ax.barh(i, duration_ms, left=start_ms, height=0.4, color=colors_by_function[function])
 
-    ax.set_xlabel('Time (ms)', fontsize=24)
-    ax.set_title('Gantt Chart of Traced Executions', fontsize=28)
+    ax.set_xlabel('Time (ms)')
+    ax.set_title('Gantt Chart of Traced Executions')
 
     split_labels = split_labels_by_delimiter(functions)
     ax.set_yticks(range(len(split_labels)))
-    ax.set_yticklabels(split_labels, fontsize=18)
+    ax.set_yticklabels(split_labels)
 
     ax.grid(True, linestyle=':', linewidth=0.5)
 
-    plt.xticks(fontsize=18)
     plt.show()
 
 
