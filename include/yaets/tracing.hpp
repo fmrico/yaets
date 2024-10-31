@@ -269,7 +269,8 @@ private:
  * identified by unique IDs, allowing traces to be started and ended globally
  * through macros and without explicit object references.
  */
-class TraceRegistry {
+class TraceRegistry
+{
 public:
   /**
    * @brief Retrieve the singleton instance of the TraceRegistry.

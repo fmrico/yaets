@@ -4,7 +4,8 @@
 #include <thread>
 #include <chrono>
 
-class TraceGuardTest : public yaets::TraceGuard {
+class TraceGuardTest : public yaets::TraceGuard
+{
 public:
   TraceGuardTest(yaets::TraceSession & session, const std::string & trace_name)
   : TraceGuard(session, trace_name) {}
