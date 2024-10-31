@@ -54,12 +54,12 @@ TraceSession::stop()
 
 void
 TraceSession::register_trace(
-  const std::string & function_name,
+  const std::string & trace_name,
   const std::chrono::nanoseconds & start_time,
   const std::chrono::nanoseconds & end_time)
 {
   TraceEvent event;
-  event.function_name = function_name;
+  event.trace_name = trace_name;
   event.start_time = start_time - session_start_time_;
   event.end_time = end_time - session_start_time_;
 
@@ -84,7 +84,7 @@ TraceSession::trace_consumer()
       TraceEvent event = trace_queue.front();
       trace_queue.pop();
 
-      trace_file << event.function_name
+      trace_file << event.trace_name
                  << " " << event.start_time.count()
                  << " " << event.end_time.count() << "\n";
     }
@@ -93,8 +93,8 @@ TraceSession::trace_consumer()
   trace_file.close();
 }
 
-TraceGuard::TraceGuard(TraceSession & session, const std::string & function_name)
-: session_(session), function_name_(extract_function_name(function_name)),
+TraceGuard::TraceGuard(TraceSession & session, const std::string & trace_name)
+: session_(session), trace_name_(extract_trace_name(trace_name)),
   start_time_(std::chrono::high_resolution_clock::now().time_since_epoch())
 {
 }
@@ -102,12 +102,12 @@ TraceGuard::TraceGuard(TraceSession & session, const std::string & function_name
 TraceGuard::~TraceGuard()
 {
   auto end_time = std::chrono::high_resolution_clock::now().time_since_epoch();
-  session_.register_trace(function_name_, start_time_, end_time);
+  session_.register_trace(trace_name_, start_time_, end_time);
 }
 
 
 std::string
-TraceGuard::extract_function_name(const std::string & function_signature)
+TraceGuard::extract_trace_name(const std::string & function_signature)
 {
   std::string result = function_signature;
 
@@ -122,6 +122,68 @@ TraceGuard::extract_function_name(const std::string & function_signature)
   }
 
   return result;
+}
+
+NamedSharedTrace::NamedSharedTrace(TraceSession & session, const std::string & trace_name)
+: session_(session), trace_name_(trace_name),
+  counter_push_(0), counter_pop_(0), elements_(0), start_times_(TRACE_SIZE_INIT)
+{
+}
+
+void
+NamedSharedTrace::start()
+{
+  std::lock_guard<std::mutex> lock(trace_mutex_);
+
+  if (elements_ >= start_times_.size()) {
+    std::cerr << "Warning: Start times vector is full. Cannot start new trace." << std::endl;
+    return;
+  }
+  elements_++;
+
+  start_times_[counter_push_] = std::chrono::high_resolution_clock::now().time_since_epoch();
+  counter_push_ = (counter_push_ + 1) % start_times_.size();
+}
+
+void
+NamedSharedTrace::end()
+{
+  std::lock_guard<std::mutex> lock(trace_mutex_);
+
+  if (elements_ == 0) {
+    std::cerr << "Warning: No matching start() call for end() - ignoring." << std::endl;
+    return;
+  }
+
+  auto end_time = std::chrono::high_resolution_clock::now().time_since_epoch();
+  session_.register_trace(trace_name_, start_times_[counter_pop_], end_time);
+  counter_pop_ = (counter_pop_ + 1) % start_times_.size();
+  elements_--;
+}
+
+void
+TraceRegistry::registerTrace(const std::string & id, TraceSession & session)
+{
+  std::lock_guard<std::mutex> lock(mutex_);
+  traces_[id] = std::make_unique<NamedSharedTrace>(session, id);
+}
+
+void
+TraceRegistry::startTrace(const std::string & id)
+{
+  std::lock_guard<std::mutex> lock(mutex_);
+  if (traces_.count(id)) {
+    traces_[id]->start();
+  }
+}
+
+void
+TraceRegistry::endTrace(const std::string & id)
+{
+  std::lock_guard<std::mutex> lock(mutex_);
+  if (traces_.count(id)) {
+    traces_[id]->end();
+  }
 }
 
 }  // namespace yaets

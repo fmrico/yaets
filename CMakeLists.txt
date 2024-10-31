@@ -16,7 +16,8 @@ install(DIRECTORY include/
 
 install(PROGRAMS
   scripts/gantt.py
-  scripts/histogram.py
+  scripts/elapsed_time_histogram.py
+  scripts/execution_time_histogram.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

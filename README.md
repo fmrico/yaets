@@ -10,7 +10,7 @@ YAETS is a library designed to trace function execution in C++ asynchronously, c
 
 ## Features
 
-- Function tracing using the `TraceSession` and `TraceGuard` classes.
+- Function tracing using the `TraceSession`, `TraceGuard`, `NamedSharedTrace`, and `TraceRegistry` classes.
 - Asynchronous logging of trace events to prevent performance overhead.
 - Python scripts to visualize traces as Gantt charts or analyze timing gaps between traces using histograms.
 
@@ -21,7 +21,8 @@ YAETS is a library designed to trace function execution in C++ asynchronously, c
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
     - [Requirements](#requirements)
-    - [Building the C++ Library](#building-the-c-library)
+    - [Building the C++ Library without ROS](#building-the-c-library-without-ros)
+    - [Building the C++ Library with ROS 2](#building-the-c-library-with-ros-2)
   - [Usage](#usage)
     - [C++ Tracing Library](#c-tracing-library)
       - [Example](#example)
@@ -34,6 +35,13 @@ YAETS is a library designed to trace function execution in C++ asynchronously, c
       - [Usage](#usage-2)
       - [Options](#options-1)
   - [Building and Running Tests](#building-and-running-tests)
+    - [Advanced Tracing with NamedSharedTrace and TraceRegistry](#advanced-tracing-with-namedsharedtrace-and-traceregistry)
+      - [NamedSharedTrace](#namedsharedtrace)
+    - [Using TraceRegistry to Manage Shared Traces by ID](#using-traceregistry-to-manage-shared-traces-by-id)
+    - [Using Macros with NamedSharedTrace](#using-macros-with-namedsharedtrace)
+  - [Tracing Session](#tracing-session)
+    - [Code to trace:](#code-to-trace)
+    - [Running and getting graphs](#running-and-getting-graphs)
   - [License](#license)
 
 ## Installation
@@ -180,6 +188,88 @@ YAETS includes unit tests to verify the functionality of the tracing library. To
     ```
 
 This will run the tests in `tests/yaets_test.cpp` and verify the correctness of the tracing system.
+
+### Advanced Tracing with NamedSharedTrace and TraceRegistry
+
+For scenarios where you need to trace shared events across multiple parts of your application, you can use `NamedSharedTrace` and `TraceRegistry`.
+
+#### NamedSharedTrace
+
+The `NamedSharedTrace` class allows you to start and stop traces from different parts of the code, under a shared trace name.
+
+```cpp
+#include <yaets/tracing.hpp>
+
+int main() {
+    yaets::TraceSession session("shared_trace_output.log");
+
+    yaets::NamedSharedTrace trace1(session, "shared_event");
+    trace1.start();
+    // Perform operations
+    trace1.end();
+
+    session.stop();
+    return 0;
+}
+```
+
+### Using TraceRegistry to Manage Shared Traces by ID
+With `TraceRegistry`, you can register and manage multiple `NamedSharedTrace` instances by ID, allowing you to start and stop traces throughout the application without directly referencing `NamedSharedTrace` objects.
+
+1. Initialize TraceRegistry: Register traces with IDs for centralized management.
+2. Start and Stop Traces by ID: Use macros to simplify starting and stopping traces.
+
+```cpp
+#include <yaets/tracing.hpp>
+
+int main() {
+    yaets::TraceSession session("registry_trace_output.log");
+
+    // Register traces with unique IDs
+    yaets::TraceRegistry::getInstance().registerTrace("trace1", session);
+    yaets::TraceRegistry::getInstance().registerTrace("trace2", session);
+
+    // Start and end traces by ID
+    yaets::TraceRegistry::getInstance().startTrace("trace1");
+    // Operations for trace1
+    yaets::TraceRegistry::getInstance().endTrace("trace1");
+
+    yaets::TraceRegistry::getInstance().startTrace("trace2");
+    // Operations for trace2
+    yaets::TraceRegistry::getInstance().endTrace("trace2");
+
+    session.stop();
+    return 0;
+}
+```
+
+### Using Macros with NamedSharedTrace
+
+To streamline the usage of `NamedSharedTrace` with `TraceRegistry`, YAETS provides macros for initializing, starting, and stopping traces by ID. This simplifies code readability and reduces the need to call methods directly on `TraceRegistry`.
+
+```cpp
+include <yaets/tracing.hpp>
+
+int main() {
+    yaets::TraceSession session("macro_trace_output.log");
+
+    // Initialize traces by ID
+    SHARED_TRACE_INIT(session, "macro_trace1");
+    SHARED_TRACE_INIT(session, "macro_trace2");
+
+    // Start and stop traces by ID
+    SHARED_TRACE_START("macro_trace1");
+    // Operations under macro_trace1
+    SHARED_TRACE_END("macro_trace1");
+
+    SHARED_TRACE_START("macro_trace2");
+    // Operations under macro_trace2
+    SHARED_TRACE_END("macro_trace2");
+
+    session.stop();
+    return 0;
+}
+```
 
 ## Tracing Session
 

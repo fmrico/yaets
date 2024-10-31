@@ -53,7 +53,7 @@ def calculate_intervals_between_starts(traces):
     return intervals
 
 
-def create_histogram(intervals, target_function, num_bins):
+def create_elapsed_time_histogram(intervals, target_function, num_bins):
     plt.hist(intervals, bins=num_bins, edgecolor='black', log=True)
     plt.xlabel('Interval between starts (ms)')
     plt.ylabel('Frequency (log scale)')
@@ -85,7 +85,7 @@ def main():
 
     intervals = calculate_intervals_between_starts(function_traces)
 
-    create_histogram(intervals, args.function, args.bins)
+    create_elapsed_time_histogram(intervals, args.function, args.bins)
 
 
 if __name__ == '__main__':
