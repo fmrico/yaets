@@ -14,8 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 import argparse
+from collections import defaultdict
 
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
@@ -42,20 +42,33 @@ def read_traces(trace_file, max_traces=None):
     return traces
 
 
+def split_labels_by_delimiter(labels, delimiter='::'):
+    return [label.replace(delimiter, '\n') for label in labels]
+
+
 def create_gantt_chart(traces):
-    functions = list({function for function, _, _ in traces})
+    grouped_traces = defaultdict(list)
+    for function, start_ms, duration_ms in traces:
+        grouped_traces[function].append((start_ms, duration_ms))
+
+    functions = list(grouped_traces.keys())
     colors = cm.get_cmap('tab10', len(functions))
-    colors_by_function = {function: colors(i) for i, function in enumerate(functions)}
+    colors_by_function = {function: colors(i / len(functions)) for i,
+                          function in enumerate(functions)}
 
     fig, ax = plt.subplots(figsize=(10, 6))
 
-    for i, (function, start_ms, duration_ms) in enumerate(traces):
-        ax.barh(function, duration_ms, left=start_ms, height=0.4,
-                color=colors_by_function[function])
+    for i, function in enumerate(functions):
+        for start_ms, duration_ms in grouped_traces[function]:
+            ax.barh(i, duration_ms, left=start_ms, height=0.4, color=colors_by_function[function])
 
     ax.set_xlabel('Time (ms)')
-    ax.set_ylabel('Functions')
     ax.set_title('Gantt Chart of Traced Executions')
+
+    split_labels = split_labels_by_delimiter(functions)
+    ax.set_yticks(range(len(split_labels)))
+    ax.set_yticklabels(split_labels)
+
     ax.grid(True, linestyle=':', linewidth=0.5)
 
     plt.show()
