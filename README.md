@@ -30,6 +30,8 @@ YAETS is a library designed to trace function execution in C++ asynchronously, c
       - [NamedSharedTrace](#namedsharedtrace)
       - [Using TraceRegistry to Manage Shared Traces by ID](#using-traceregistry-to-manage-shared-traces-by-id)
     - [Using Macros with NamedSharedTrace](#using-macros-with-namedsharedtrace)
+      - [Example 1](#example-1)
+      - [Example 2](#example-2)
     - [How It Works](#how-it-works)
       - [Key Methods](#key-methods)
     - [Python Gantt Chart Script](#python-gantt-chart-script)
@@ -173,6 +175,8 @@ int main() {
 
 To streamline the usage of `NamedSharedTrace` with `TraceRegistry`, YAETS provides macros for initializing, starting, and stopping traces by ID. This simplifies code readability and reduces the need to call methods directly on `TraceRegistry`.
 
+#### Example 1
+
 ```cpp
 include <yaets/tracing.hpp>
 
@@ -195,6 +199,37 @@ int main() {
     session.stop();
     return 0;
 }
+```
+
+
+#### Example 2
+
+```
+class SensorDriverNode : public rclcpp::Node
+{
+  ...
+  void produce_data()
+  {
+    SHARED_TRACE_START("brake_process");
+    waste_time(shared_from_this(), 200us);
+
+    sensor_msgs::msg::Image image_msg;
+    pub_->publish(image_msg);
+  }
+...
+class BrakeActuatorNode : public rclcpp::Node
+{
+  ...
+  void react_obstacle(vision_msgs::msg::Detection3D::SharedPtr msg)
+  {
+    waste_time(shared_from_this(), 2ms);
+    SHARED_TRACE_END("brake_process");
+  } 
+...
+int main(int argc, char * argv[])
+{
+  ...
+  SHARED_TRACE_INIT(session, "brake_process");
 ```
 
 ### How It Works
