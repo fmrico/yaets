@@ -207,7 +207,7 @@ int main() {
 
 #### Example 2
 
-```
+```cpp
 class SensorDriverNode : public rclcpp::Node
 {
   ...
