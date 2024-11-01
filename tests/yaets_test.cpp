@@ -27,7 +27,8 @@ TEST(yaets, TraceSessionInitStop) {
 
 TEST(yaets, TraceSessionWriteEvent) {
   yaets::TraceSession trace_session("test_trace_event.log");
-  trace_session.register_trace("testFunction", std::chrono::nanoseconds(100),
+  trace_session.register_trace(
+    "testFunction", std::chrono::nanoseconds(100),
     std::chrono::nanoseconds(200));
   trace_session.stop();
   std::ifstream file("test_trace_event.log");
