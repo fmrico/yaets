@@ -37,9 +37,12 @@ YAETS is a library designed to trace function execution in C++ asynchronously, c
     - [Python Gantt Chart Script](#python-gantt-chart-script)
       - [Usage](#usage-1)
       - [Options](#options)
-    - [Python Histogram Script](#python-histogram-script)
+    - [Python Histogram Script for ellapsed time](#python-histogram-script-for-ellapsed-time)
       - [Usage](#usage-2)
       - [Options](#options-1)
+    - [Python Histogram Script for execution time](#python-histogram-script-for-execution-time)
+      - [Usage](#usage-3)
+      - [Options](#options-2)
   - [Building and Running Tests](#building-and-running-tests)
   - [Tracing Session](#tracing-session)
     - [Code to trace:](#code-to-trace)
@@ -274,19 +277,19 @@ The Python script `gantt.py` allows you to visualize the traced functions as a G
   
 The resulting Gantt chart shows each function's execution times, allowing you to visualize the sequence and duration of function calls.
 
-### Python Histogram Script
+### Python Histogram Script for ellapsed time
 
-The Python script `histogram.py` analyzes the intervals between function executions and visualizes them as a histogram.
+The Python script `elaspsed_histogram.py` analyzes the intervals between function executions and visualizes them as a histogram.
 
 #### Usage
 
-1. Run the `histogram.py` script, specifying the function name you want to analyze:
+1. Run the `elaspsed_histogram.py` script, specifying the function name you want to analyze:
     ```bash
-    python3 scripts/histogram.py trace_output.log --function example_function --bins 50
+    python3 scripts/elaspsed_histogram.py trace_output.log --function example_function --bins 50
     ```
     or altenativelly
      ```bash
-    ros2 run yaest histogram.py trace_output.log --function example_function --bins 50
+    ros2 run yaest elaspsed_histogram.py trace_output.log --function example_function --bins 50
     ```
 
 
@@ -296,6 +299,28 @@ The Python script `histogram.py` analyzes the intervals between function executi
 - `--bins`: The number of bins for the histogram (to control the resolution).
 
 This tool helps you understand how frequently functions are called and whether there are patterns in the execution intervals.
+
+### Python Histogram Script for execution time
+
+The Python script `execution_histogram.py` analyzes execution time of a function and visualizes them as a histogram.
+
+#### Usage
+
+1. Run the `execution_histogram.py` script, specifying the function name you want to analyze:
+    ```bash
+    python3 scripts/execution_histogram.py trace_output.log --function example_function --bins 50
+    ```
+    or altenativelly
+     ```bash
+    ros2 run yaest execution_histogram.py trace_output.log --function example_function --bins 50
+    ```
+
+
+#### Options
+
+- `--function`: The name of the function whose execution execution time you want to analyze.
+- `--bins`: The number of bins for the histogram (to control the resolution).
+
 
 ## Building and Running Tests
 
@@ -441,7 +466,7 @@ Stop both processes and
 
 ```bash
 ros2 run yaest gantt.py ./session1.log --max_traces 200
-ros2 run yaest histogram.py ../session1.log  --function ConsumerNode::timer_callback --bins 40
+ros2 run yaest elaspsed_histogram.py ../session1.log  --function ConsumerNode::timer_callback --bins 40
 ```
 And we get the two graphs:
 
