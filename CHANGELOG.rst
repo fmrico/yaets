@@ -2,8 +2,8 @@
 Changelog for package yaets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.2 (2024-11-25)
+------------------
 * Add e2e traces
 * One extra exmaple in README
 * Add end to end traces
