@@ -1,0 +1,30 @@
+name: noetic
+
+on:
+  pull_request:
+    branches:
+      - noetic
+  push:
+    branches:
+      - noetic
+  schedule:
+    - cron: '0 0 * * 6'
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04 
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup ROS1
+        uses: ros-tooling/setup-ros@0.7.1
+        with:
+          required-ros-distributions: noetic
+
+      - name: Install dependencies and build
+        run: |
+          sudo apt-get update -qq
+          rosdep update
+          rosdep install --from-paths src --ignore-src -r -y
+          source /opt/ros/noetic/setup.bash
+          catkin_make

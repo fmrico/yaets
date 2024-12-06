@@ -1,110 +1,44 @@
-cmake_minimum_required(VERSION 3.5)
-project(yaets VERSION 0.1)
+cmake_minimum_required(VERSION 3.0.2)
+project(yaets)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include(GNUInstallDirs)
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  rospy
+  std_msgs
+)
 
-option(BUILD_WITH_ROS "Build with ROS support using ament_cmake" ON)
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS}
+)
 
-if(BUILD_WITH_ROS)
-  find_package(ament_cmake REQUIRED)
-  ament_export_include_directories(include)
-  ament_export_libraries(${PROJECT_NAME})
-endif()
-
-include_directories(include)
-
-add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME}
   src/yaets/tracing.cpp
 )
 
-if(BUILD_WITH_ROS)
-  message(STATUS "Installing with ROS")
-  install(DIRECTORY include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-  )
+catkin_package(
+  INCLUDE_DIRS include
+  LIBRARIES ${PROJECT_NAME}
+  CATKIN_DEPENDS roscpp rospy std_msgs
+)
 
-  install(PROGRAMS
-    scripts/gantt.py
-    scripts/histogram.py
-    DESTINATION ${CMAKE_INSTALL_BINDIR}
-  )
+install(TARGETS ${PROJECT_NAME}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
-  install(TARGETS
-    ${PROJECT_NAME}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-  )
+install(DIRECTORY include/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+)
 
-else()
-  message(STATUS "Installing without ROS")
+install(PROGRAMS
+  scripts/gantt.py
+  scripts/histogram.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}/scripts
+)
 
-  install(DIRECTORY include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-  )
-
-  install(PROGRAMS
-    scripts/gantt.py
-    scripts/histogram.py
-    DESTINATION ${CMAKE_INSTALL_BINDIR}
-  )
-
-  install(TARGETS
-    ${PROJECT_NAME}
-    EXPORT yaetsTargets
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-  )
-endif()
-
-if(BUILD_TESTING)
-  enable_testing()
-
-  if(BUILD_WITH_ROS)
-    find_package(ament_lint_auto REQUIRED)
-    ament_lint_auto_find_test_dependencies()
-    find_package(ament_cmake_gtest REQUIRED)
-  else()
-    find_package(GTest REQUIRED)
-    include_directories(${GTEST_INCLUDE_DIRS})
-    add_subdirectory(tests)
-  endif()
-endif()
-
-if(BUILD_WITH_ROS)
-  ament_package()
-else()
-  export(PACKAGE ${PROJECT_NAME})
-endif()
-
-if(NOT BUILD_WITH_ROS)
-
-  include(CMakePackageConfigHelpers)
-
-  write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/yaetsConfigVersion.cmake"
-    VERSION ${PROJECT_VERSION}
-    COMPATIBILITY AnyNewerVersion
-  )
-
-  configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/yaetsConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/yaetsConfig.cmake"
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/yaets
-  )
-
-  install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/yaetsConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/yaetsConfigVersion.cmake"
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/yaets
-  )
-
-  install(EXPORT yaetsTargets
-    FILE yaetsTargets.cmake
-    NAMESPACE yaets::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/yaets
-  )
-endif()
+add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})

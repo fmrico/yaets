@@ -44,63 +44,28 @@ YAETS is a library designed to trace function execution in C++ asynchronously, c
 - **CMake** for building the project
 - **Python 3.6+** for running the scripts
 - **Matplotlib** for visualizing data in Python
+- **ROS1** noetic
 
-### Building the C++ Library without ROS2 (ROS 1 and stand-alone)
+### Building the C++ Library with ROS1-noetic 
 
 1. Clone the repository and navigate to the project directory:
     ```bash
+    cd project/src
     git clone https://github.com/fmrico/yaets.git
-    cd yaets
     ```
 
-2. Build the library using CMake:
+2. Build the library using catkin build:
     ```bash
-    mkdir build
-    cd build
-    cmake -D BUILD_WITH_ROS=OFF  ..
-    make
-    ```
-
-3. Install the library:
-    ```bash
-    sudo make install
+    catkin build
     ```
     
-4. Configure your CMakeLists.txt 
-  To use the yaets library in your project, you need to modify your project's CMakeLists.txt file to find and link against yaets.
-
-    ```CMake
-    find_package(yaets REQUIRED)
-
-    add_executable(your_executable src/main.cpp)
-
-    target_link_libraries(your_executable PRIVATE yaets::yaets)
-    ```
-
-### Building the C++ Library with ROS 2
-
-1. Clone the repository and navigate to the project directory:
-    ```bash
-    cd my_ros_ws/src
-    git clone https://github.com/fmrico/yaets.git
-    cd ..
-    ```
-
-2. Build the library using Colcon:
-    ```bash
-    colcon build
-    ```
-
 3. Configure your CMakeLists.txt 
   To use the yaets library in your project, you need to modify your project's CMakeLists.txt file to find and link against yaets.
 
     ```CMake
     find_package(yaets REQUIRED)
 
-    ament_target_dependencies(your_ros_node
-      yaets
-    )
-
+    target_link_libraries(your_node PRIVATE ${yaets_LIBRARIES})
     ```
 
 ## Usage
