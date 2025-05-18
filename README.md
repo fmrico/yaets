@@ -1,8 +1,8 @@
 
 # YAETS: Yet Another Execution Tracing System
 
-[![rolling](https://github.com/fmrico/yaest/actions/workflows/rolling.yaml/badge.svg?branch=rolling)](https://github.com/fmrico/yaest/actions/workflows/rolling.yaml)
-[![jazzy-devel](https://github.com/fmrico/yaest/actions/workflows/jazzy-devel.yaml/badge.svg?branch=jazzy-devel)](https://github.com/fmrico/yaest/actions/workflows/jazzy-devel.yaml)
+[![rolling](https://github.com/fmrico/yaets/actions/workflows/rolling.yaml/badge.svg?branch=rolling)](https://github.com/fmrico/yaets/actions/workflows/rolling.yaml)
+[![jazzy-devel](https://github.com/fmrico/yaets/actions/workflows/jazzy-devel.yaml/badge.svg?branch=jazzy-devel)](https://github.com/fmrico/yaets/actions/workflows/jazzy-devel.yaml)
 
 YAETS is a library designed to trace function execution in C++ asynchronously, combined with Python tools to analyze the results through Gantt charts and histograms.
 
@@ -269,7 +269,7 @@ The Python script `gantt.py` allows you to visualize the traced functions as a G
     ```
     or altenativelly
      ```bash
-    ros2 run yaest gantt.py trace_output.log --max_traces 100
+    ros2 run yaets gantt.py trace_output.log --max_traces 100
     ```
 
 #### Options
@@ -290,7 +290,7 @@ The Python script `elaspsed_histogram.py` analyzes the intervals between functio
     ```
     or altenativelly
      ```bash
-    ros2 run yaest elaspsed_histogram.py trace_output.log --function example_function --bins 50
+    ros2 run yaets elaspsed_histogram.py trace_output.log --function example_function --bins 50
     ```
 
 
@@ -313,7 +313,7 @@ The Python script `execution_histogram.py` analyzes execution time of a function
     ```
     or altenativelly
      ```bash
-    ros2 run yaest execution_histogram.py trace_output.log --function example_function --bins 50
+    ros2 run yaets execution_histogram.py trace_output.log --function example_function --bins 50
     ```
 
 
@@ -466,8 +466,8 @@ ros2 run yaets executors     # In terminal 2
 Stop both processes and
 
 ```bash
-ros2 run yaest gantt.py ./session1.log --max_traces 200
-ros2 run yaest elaspsed_histogram.py ../session1.log  --function ConsumerNode::timer_callback --bins 40
+ros2 run yaets gantt.py ./session1.log --max_traces 200
+ros2 run yaets elaspsed_histogram.py ../session1.log  --function ConsumerNode::timer_callback --bins 40
 ```
 And we get the two graphs:
 
