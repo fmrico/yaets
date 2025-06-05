@@ -22,6 +22,7 @@ install(PROGRAMS
   scripts/gantt.py
   scripts/elapsed_time_histogram.py
   scripts/execution_time_histogram.py
+  scripts/stats.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
