@@ -87,6 +87,7 @@ TraceSession::trace_consumer()
       trace_file << event.trace_name
                  << " " << event.start_time.count()
                  << " " << event.end_time.count() << "\n";
+      trace_file.flush();
     }
   }
 

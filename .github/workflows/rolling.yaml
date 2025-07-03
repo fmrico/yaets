@@ -19,11 +19,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup ROS 2
-        uses: ros-tooling/setup-ros@0.7.1
+        uses: ros-tooling/setup-ros@0.7.9
         with:
           required-ros-distributions: rolling
       - name: build and test
-        uses: ros-tooling/action-ros-ci@0.3.6
+        uses: ros-tooling/action-ros-ci@0.3.15
         with:
           package-name: yaets
           target-ros2-distro: rolling

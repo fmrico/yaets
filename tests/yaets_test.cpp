@@ -60,6 +60,8 @@ TEST(yaets, TraceGuardNameExtraction) {
   TraceGuardTest trace_guard(trace_session, "no_file");
   ASSERT_EQ(trace_guard.extract_trace_name_test("function_1(std::string args)"), "function_1");
   ASSERT_EQ(trace_guard.extract_trace_name_test("function_1()"), "function_1");
+  trace_session.stop();
+  std::remove("no_file.log");
 }
 
 TEST(yaets, TraceGuardStartEndTimes) {
