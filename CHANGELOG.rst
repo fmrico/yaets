@@ -2,8 +2,8 @@
 Changelog for package yaets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.0 (2025-09-26)
+------------------
 * Add all diagrams script
 * Add stats script
 * Add cmake export targets
