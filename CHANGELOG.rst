@@ -2,6 +2,11 @@
 Changelog for package yaets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix python shebang
+* Contributors: Francisco Martín Rico
+
 1.0.1 (2025-10-12)
 ------------------
 
