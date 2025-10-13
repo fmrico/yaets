@@ -2,8 +2,8 @@
 Changelog for package yaets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.3 (2025-10-13)
+------------------
 * Add python dep to package.xml
 * Contributors: Francisco Martín Rico
 
