@@ -2,8 +2,8 @@
 Changelog for package yaets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.4 (2025-10-16)
+------------------
 * Merge branch 'rolling' into jazzy-devel
 * Contributors: Francisco Martín Rico
 
