@@ -1,12 +1,12 @@
-name: rolling
+name: kilted
 
 on:
   pull_request:
     branches:
-      - rolling
+      - kilted
   push:
     branches:
-      - rolling
+      - kilted
   schedule:
       - cron: '0 0 * * 6'     
 jobs:
@@ -21,12 +21,12 @@ jobs:
       - name: Setup ROS 2
         uses: ros-tooling/setup-ros@0.7.15
         with:
-          required-ros-distributions: rolling
+          required-ros-distributions: kilted
       - name: build and test
         uses: ros-tooling/action-ros-ci@0.4.5
         with:
           package-name: yaets
-          target-ros2-distro: rolling
+          target-ros2-distro: kilted
           colcon-defaults: |
             {
               "test": {
