@@ -6,6 +6,8 @@
 [![kilted](https://github.com/fmrico/yaets/actions/workflows/kilted.yaml/badge.svg)](https://github.com/fmrico/yaets/actions/workflows/kilted.yaml)
 [![jazzy-devel](https://github.com/fmrico/yaets/actions/workflows/jazzy-devel.yaml/badge.svg?branch=jazzy-devel)](https://github.com/fmrico/yaets/actions/workflows/jazzy-devel.yaml)
 
+Doxygen documentation: [https://fmrico.github.io/yaets/](https://fmrico.github.io/yaets/)
+
 YAETS is a library designed to trace function execution in C++ asynchronously, combined with Python tools to analyze the results through Gantt charts and histograms.
 
 ![histogram](https://github.com/user-attachments/assets/4845320f-8736-4370-9ccb-d837426bdfaa)
