@@ -2,6 +2,11 @@
 Changelog for package yaets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'rolling' into jazzy-devel
+* Contributors: Francisco Martín Rico
+
 1.0.3 (2025-10-13)
 ------------------
 * Add python dep to package.xml
