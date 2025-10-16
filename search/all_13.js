@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['table_20of_20contents_0',['Table of Contents',['../index.html#autotoc_md2',1,'']]],
+  ['test_1',['TEST',['../yaets__test_8cpp.html#a1456de8939ad92857db3977358aa48f4',1,'TEST(yaets, TraceSessionInitStop):&#160;yaets_test.cpp'],['../yaets__test_8cpp.html#af5057207f20526219901e64854915bed',1,'TEST(yaets, TraceSessionWriteEvent):&#160;yaets_test.cpp'],['../yaets__test_8cpp.html#ad7443b1fd163572942a5c127a39ee058',1,'TEST(yaets, TraceGuardNameExtraction):&#160;yaets_test.cpp'],['../yaets__test_8cpp.html#abdd6dadcd4bff2db042d91058ae696a0',1,'TEST(yaets, TraceGuardStartEndTimes):&#160;yaets_test.cpp'],['../yaets__test_8cpp.html#a6d5d813f2a4bf869ff6429255f70d90e',1,'TEST(yaets, NamedSharedTraceBasic):&#160;yaets_test.cpp'],['../yaets__test_8cpp.html#af2252e388f505be7dcf90beec3357339',1,'TEST(yaets, NamedSharedTraceOverCapacity):&#160;yaets_test.cpp'],['../yaets__test_8cpp.html#a9867b5f75c931e95be8a530c62ef0c00',1,'TEST(yaets, TraceRegistrySingleTrace):&#160;yaets_test.cpp'],['../yaets__test_8cpp.html#a9583f2e30c3e5cee111819001843a120',1,'TEST(yaets, TraceRegistryMultipleTraces):&#160;yaets_test.cpp'],['../yaets__test_8cpp.html#aaef646aefb70622e7efe397cb7199da4',1,'TEST(yaets, MacroSharedTrace):&#160;yaets_test.cpp']]],
+  ['tests_2',['Building and Running Tests',['../index.html#autotoc_md27',1,'']]],
+  ['the_20c_20library_20with_20ros_202_3',['Building the C++ Library with ROS 2',['../index.html#autotoc_md6',1,'']]],
+  ['the_20c_20library_20without_20ros_4',['Building the C++ Library without ROS',['../index.html#autotoc_md5',1,'']]],
+  ['time_5',['time',['../index.html#autotoc_md21',1,'Python Histogram Script for ellapsed time'],['../index.html#autotoc_md24',1,'Python Histogram Script for execution time']]],
+  ['to_20manage_20shared_20traces_20by_20id_6',['Using TraceRegistry to Manage Shared Traces by ID',['../index.html#autotoc_md12',1,'']]],
+  ['to_20trace_3a_7',['Code to trace:',['../index.html#autotoc_md29',1,'']]],
+  ['trace_3a_8',['Code to trace:',['../index.html#autotoc_md29',1,'']]],
+  ['trace_5fevent_9',['TRACE_EVENT',['../tracing_8hpp.html#a469b8c3740dc6fd9182d4e798a8d357b',1,'tracing.hpp']]],
+  ['trace_5fname_10',['trace_name',['../structyaets_1_1TraceEvent.html#a1fe236c549176fe67bd11490b736027a',1,'yaets::TraceEvent']]],
+  ['trace_5fsize_5finit_11',['TRACE_SIZE_INIT',['../classyaets_1_1NamedSharedTrace.html#a7f15c062997ffd1189ce2e9a9b79d2e3',1,'yaets::NamedSharedTrace']]],
+  ['traceevent_12',['TraceEvent',['../structyaets_1_1TraceEvent.html',1,'yaets']]],
+  ['traceguard_13',['TraceGuard',['../classyaets_1_1TraceGuard.html',1,'TraceGuard'],['../classyaets_1_1TraceGuard.html#ab9a48cf94d86a6107441271b8f214137',1,'yaets::TraceGuard::TraceGuard()']]],
+  ['traceguardtest_14',['TraceGuardTest',['../classTraceGuardTest.html',1,'TraceGuardTest'],['../classTraceGuardTest.html#a5af28ef1a6ace32eab16be1af3e5cb21',1,'TraceGuardTest::TraceGuardTest()']]],
+  ['traceregistry_15',['TraceRegistry',['../index.html#autotoc_md10',1,'Advanced Tracing with NamedSharedTrace and TraceRegistry'],['../classyaets_1_1TraceRegistry.html',1,'TraceRegistry']]],
+  ['traceregistry_20to_20manage_20shared_20traces_20by_20id_16',['Using TraceRegistry to Manage Shared Traces by ID',['../index.html#autotoc_md12',1,'']]],
+  ['traces_20by_20id_17',['Using TraceRegistry to Manage Shared Traces by ID',['../index.html#autotoc_md12',1,'']]],
+  ['tracesession_18',['TraceSession',['../classyaets_1_1TraceSession.html',1,'TraceSession'],['../classyaets_1_1TraceSession.html#a03eb91e5de9744d2f653a852dc3636e6',1,'yaets::TraceSession::TraceSession()']]],
+  ['tracing_20library_19',['C++ Tracing Library',['../index.html#autotoc_md8',1,'']]],
+  ['tracing_20session_20',['Tracing Session',['../index.html#autotoc_md28',1,'']]],
+  ['tracing_20system_21',['YAETS: Yet Another Execution Tracing System',['../index.html',1,'']]],
+  ['tracing_20with_20namedsharedtrace_20and_20traceregistry_22',['Advanced Tracing with NamedSharedTrace and TraceRegistry',['../index.html#autotoc_md10',1,'']]],
+  ['tracing_2ecpp_23',['tracing.cpp',['../tracing_8cpp.html',1,'']]],
+  ['tracing_2ehpp_24',['tracing.hpp',['../tracing_8hpp.html',1,'']]]
+];

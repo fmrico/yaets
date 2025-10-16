@@ -1,0 +1,7 @@
+var searchData=
+[
+  ['test_0',['TEST',['../yaets__test_8cpp.html#a1456de8939ad92857db3977358aa48f4',1,'TEST(yaets, TraceSessionInitStop):&#160;yaets_test.cpp'],['../yaets__test_8cpp.html#af5057207f20526219901e64854915bed',1,'TEST(yaets, TraceSessionWriteEvent):&#160;yaets_test.cpp'],['../yaets__test_8cpp.html#ad7443b1fd163572942a5c127a39ee058',1,'TEST(yaets, TraceGuardNameExtraction):&#160;yaets_test.cpp'],['../yaets__test_8cpp.html#abdd6dadcd4bff2db042d91058ae696a0',1,'TEST(yaets, TraceGuardStartEndTimes):&#160;yaets_test.cpp'],['../yaets__test_8cpp.html#a6d5d813f2a4bf869ff6429255f70d90e',1,'TEST(yaets, NamedSharedTraceBasic):&#160;yaets_test.cpp'],['../yaets__test_8cpp.html#af2252e388f505be7dcf90beec3357339',1,'TEST(yaets, NamedSharedTraceOverCapacity):&#160;yaets_test.cpp'],['../yaets__test_8cpp.html#a9867b5f75c931e95be8a530c62ef0c00',1,'TEST(yaets, TraceRegistrySingleTrace):&#160;yaets_test.cpp'],['../yaets__test_8cpp.html#a9583f2e30c3e5cee111819001843a120',1,'TEST(yaets, TraceRegistryMultipleTraces):&#160;yaets_test.cpp'],['../yaets__test_8cpp.html#aaef646aefb70622e7efe397cb7199da4',1,'TEST(yaets, MacroSharedTrace):&#160;yaets_test.cpp']]],
+  ['traceguard_1',['TraceGuard',['../classyaets_1_1TraceGuard.html#ab9a48cf94d86a6107441271b8f214137',1,'yaets::TraceGuard']]],
+  ['traceguardtest_2',['TraceGuardTest',['../classTraceGuardTest.html#a5af28ef1a6ace32eab16be1af3e5cb21',1,'TraceGuardTest']]],
+  ['tracesession_3',['TraceSession',['../classyaets_1_1TraceSession.html#a03eb91e5de9744d2f653a852dc3636e6',1,'yaets::TraceSession']]]
+];
