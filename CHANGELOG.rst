@@ -2,6 +2,16 @@
 Changelog for package yaets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.0.3 (2025-10-13)
+------------------
+* Add python dep to package.xml
+* Contributors: Francisco Martín Rico
+
+1.0.2 (2025-10-13)
+------------------
+* Fix python shebang
+* Contributors: Francisco Martín Rico
+
 1.0.1 (2025-10-12)
 ------------------
 

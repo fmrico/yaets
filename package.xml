@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>yaets</name>
-  <version>1.0.1</version>
+  <version>1.0.3</version>
   <description>This package provides a execution tracing library.</description>
   <author>Francisco Martín Rico</author>
   <maintainer email="fmrico@gmail.com">Francisco Martín Rico</maintainer>
   <license>Apache License, Version 2.0</license>
 
   <build_depend>ament_cmake</build_depend>
+  <buildtool_depend>python_cmake_module</buildtool_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
