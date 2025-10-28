@@ -13,7 +13,7 @@ YAETS is a library designed to trace function execution in C++ asynchronously, c
 
 - Function tracing using the `TraceSession`, `TraceGuard`, `NamedSharedTrace`, and `TraceRegistry` classes.
 - Asynchronous logging of trace events to prevent performance overhead.
-- Python scripts to visualize traces as Gantt charts or analyze timing gaps between traces using histograms.
+- Python scripts to visualize traces as Gantt charts or analyze timing gaps between traces using histograms. 
 
 ## Table of Contents
 
@@ -477,3 +477,4 @@ And we get the two graphs:
 ## License
 
 YAETS is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for more details.
+
