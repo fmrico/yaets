@@ -21,7 +21,7 @@ jobs:
         with:
           ref: humble
       - name: Setup ROS 2
-        uses: ros-tooling/setup-ros@0.7.9
+        uses: ros-tooling/setup-ros@0.5.1
         with:
           required-ros-distributions: humble
       - name: build and test
