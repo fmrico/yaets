@@ -5,6 +5,7 @@
 [![rolling](https://github.com/fmrico/yaets/actions/workflows/rolling.yaml/badge.svg?branch=rolling)](https://github.com/fmrico/yaets/actions/workflows/rolling.yaml)
 [![kilted](https://github.com/fmrico/yaets/actions/workflows/kilted.yaml/badge.svg)](https://github.com/fmrico/yaets/actions/workflows/kilted.yaml)
 [![jazzy-devel](https://github.com/fmrico/yaets/actions/workflows/jazzy-devel.yaml/badge.svg?branch=jazzy-devel)](https://github.com/fmrico/yaets/actions/workflows/jazzy-devel.yaml)
+[![humble](https://github.com/fmrico/yaets/actions/workflows/humble.yaml/badge.svg?branch=humble)](https://github.com/fmrico/yaets/actions/workflows/humble.yaml)
 
 Doxygen documentation: [https://fmrico.github.io/yaets/](https://fmrico.github.io/yaets/)
 
