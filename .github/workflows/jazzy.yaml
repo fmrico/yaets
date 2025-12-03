@@ -1,12 +1,12 @@
-name: jazzy-devel
+name: jazzy
 
 on:
   pull_request:
     branches:
-      - jazzy-devel
+      - jazzy
   push:
     branches:
-      - jazzy-devel
+      - jazzy
   schedule:
       - cron: '0 0 * * 6'     
 jobs:
@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: jazzy-devel
+          ref: jazzy
       - name: Setup ROS 2
         uses: ros-tooling/setup-ros@0.7.15
         with:
