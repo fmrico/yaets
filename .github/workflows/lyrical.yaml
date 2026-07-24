@@ -11,9 +11,9 @@ on:
       - cron: '0 0 * * 6'     
 jobs:
   build-and-test:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     container:
-      image: ubuntu:noble
+      image: ghcr.io/ros-tooling/setup-ros-docker/setup-ros-docker-ubuntu-resolute-ros-rolling-ros-base:master
     steps:
       - uses: actions/checkout@v4
         with:
