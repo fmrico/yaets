@@ -2,8 +2,8 @@
 Changelog for package yaets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.1.0 (2026-07-26)
+------------------
 * Update README
 * Update CI
 * Contributors: Francisco Martín Rico, Francisco Miguel Moreno
