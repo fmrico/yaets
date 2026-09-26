@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['another_20execution_20tracing_20system_0',['YAETS: Yet Another Execution Tracing System',['../index.html',1,'']]]
+  ['1_0',['Example 1',['../index.html#autotoc_md14',1,'']]]
 ];

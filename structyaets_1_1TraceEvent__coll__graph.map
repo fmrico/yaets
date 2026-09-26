@@ -1,7 +1,7 @@
 <map id="TraceEvent" name="TraceEvent">
-<area shape="rect" id="Node000001" title="Structure to represent a trace event." alt="" coords="39,109,126,135"/>
+<area shape="rect" id="Node000001" title="Structure to represent a trace event." alt="" coords="42,122,129,148"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,5,59,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="30,46,30,66,35,84,45,96,58,106,55,111,42,100,31,86,25,66,24,47"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="84,5,182,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="125,46,106,86,92,110,88,108,102,84,120,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="29,46,29,72,36,97,46,110,59,120,56,124,42,114,31,100,23,73,24,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="90,5,188,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="133,47,112,100,97,123,92,120,107,97,128,45"/>
 </map>
