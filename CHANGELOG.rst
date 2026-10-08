@@ -2,6 +2,12 @@
 Changelog for package yaets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Producers never wait for the trace file: events are written outside the queue lock, in batches (no priority inversion on real-time threads)
+* Conda packages with pixi (pixi-build-ros)
+* Contributors: Francisco Martín Rico
+
 1.1.0 (2026-07-26)
 ------------------
 * Update README
