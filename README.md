@@ -1,8 +1,14 @@
 
 # YAETS: Yet Another Execution Tracing System
 
+[![Doxygen Deployment](https://github.com/fmrico/yaets/actions/workflows/doxygen-doc.yml/badge.svg)](https://github.com/fmrico/yaets/actions/workflows/doxygen-doc.yml)
 [![rolling](https://github.com/fmrico/yaets/actions/workflows/rolling.yaml/badge.svg?branch=rolling)](https://github.com/fmrico/yaets/actions/workflows/rolling.yaml)
+[![lyrical](https://github.com/fmrico/yaets/actions/workflows/lyrical.yaml/badge.svg?branch=lyrical)](https://github.com/fmrico/yaets/actions/workflows/lyrical.yaml)
+[![kilted](https://github.com/fmrico/yaets/actions/workflows/kilted.yaml/badge.svg?branch=kilted)](https://github.com/fmrico/yaets/actions/workflows/kilted.yaml)
 [![jazzy](https://github.com/fmrico/yaets/actions/workflows/jazzy.yaml/badge.svg?branch=jazzy)](https://github.com/fmrico/yaets/actions/workflows/jazzy.yaml)
+[![humble](https://github.com/fmrico/yaets/actions/workflows/humble.yaml/badge.svg?branch=humble)](https://github.com/fmrico/yaets/actions/workflows/humble.yaml)
+
+Doxygen documentation: [https://fmrico.github.io/yaets/](https://fmrico.github.io/yaets/)
 
 YAETS is a library designed to trace function execution in C++ asynchronously, combined with Python tools to analyze the results through Gantt charts and histograms.
 
@@ -13,7 +19,7 @@ YAETS is a library designed to trace function execution in C++ asynchronously, c
 
 - Function tracing using the `TraceSession`, `TraceGuard`, `NamedSharedTrace`, and `TraceRegistry` classes.
 - Asynchronous logging of trace events to prevent performance overhead.
-- Python scripts to visualize traces as Gantt charts or analyze timing gaps between traces using histograms. 
+- Python scripts to visualize traces as Gantt charts or analyze timing gaps between traces using histograms.
 
 ## Table of Contents
 
