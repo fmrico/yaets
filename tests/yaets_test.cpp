@@ -15,7 +15,19 @@
 
 #include "yaets/tracing.hpp"
 #include "gtest/gtest.h"
+#ifndef _WIN32
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#endif
+
+#include <algorithm>
+#include <atomic>
+#include <cstdio>
 #include <fstream>
+#include <string>
+#include <vector>
 #include <thread>
 #include <chrono>
 
@@ -168,6 +180,160 @@ TEST(yaets, MacroSharedTrace) {
   file.close();
   std::remove("test_macro_trace.log");
 }
+
+TEST(yaets, EventsFromSeveralThreadsAreAllWritten) {
+  const std::string path = "test_several_threads.log";
+  {
+    yaets::TraceSession session(path);
+    std::vector<std::thread> producers;
+    for (int t = 0; t < 4; ++t) {
+      producers.emplace_back(
+        [&session, t]() {
+          for (int i = 0; i < 2000; ++i) {
+            session.register_trace(
+              "thread_" + std::to_string(t), std::chrono::nanoseconds(i),
+              std::chrono::nanoseconds(i + 1));
+          }
+        });
+    }
+    for (auto & producer : producers) {
+      producer.join();
+    }
+    session.stop();
+  }
+  std::ifstream file(path);
+  std::string name;
+  long long start = 0, end = 0;
+  int count = 0;
+  while (file >> name >> start >> end) {
+    ++count;
+  }
+  EXPECT_EQ(count, 8000);
+  std::remove(path.c_str());
+}
+
+TEST(yaets, StopRightAfterRegisteringWritesEverything) {
+  // Many times: stopping must neither lose events nor hang.
+  for (int run = 0; run < 50; ++run) {
+    const std::string path = "test_stop_race.log";
+    {
+      yaets::TraceSession session(path);
+      session.register_trace("last", std::chrono::nanoseconds(1), std::chrono::nanoseconds(2));
+      session.stop();
+    }
+    std::ifstream file(path);
+    std::string line;
+    int count = 0;
+    while (std::getline(file, line)) {
+      ++count;
+    }
+    EXPECT_EQ(count, 1) << "run " << run;
+    std::remove(path.c_str());
+  }
+}
+
+#ifndef _WIN32  // FIFOs are POSIX.
+TEST(yaets, RegisteringDoesNotWaitForASlowFile) {
+  // The trace file is a FIFO nobody reads for a while: once the pipe is full, the consumer is
+  // blocked writing it. Whoever registers traces (e.g. a real-time thread) must not block with it.
+  const std::string path = "test_slow_trace.fifo";
+  std::remove(path.c_str());
+  ASSERT_EQ(mkfifo(path.c_str(), 0600), 0);
+
+  // Opened before the session, so the consumer can open it for writing.
+  const int reader = open(path.c_str(), O_RDONLY | O_NONBLOCK);
+  ASSERT_GE(reader, 0);
+#ifdef F_GETPIPE_SZ
+  const int capacity = fcntl(reader, F_GETPIPE_SZ);
+#else
+  const int capacity = 65536;
+#endif
+  ASSERT_GT(capacity, 0);
+
+  auto pending_in_pipe = [reader]() {
+      int bytes = 0;
+      ioctl(reader, FIONREAD, &bytes);
+      return bytes;
+    };
+
+  std::atomic<bool> drain {false};
+  int read_lines = 0;
+  std::thread drainer([&]() {
+      while (!drain) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+      }
+      char buffer[4096];
+      while (true) {
+        const ssize_t n = read(reader, buffer, sizeof(buffer));
+        if (n > 0) {
+          read_lines += static_cast<int>(std::count(buffer, buffer + n, '\n'));
+        } else if (n == 0) {
+          break;  // The consumer closed the file: all written.
+        } else {
+          std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        }
+      }
+    });
+  // If registering ever blocks, the pipe is drained after a while anyway, so the test ends.
+  std::thread watchdog([&]() {
+      const auto until = std::chrono::steady_clock::now() + std::chrono::seconds(3);
+      while (!drain && std::chrono::steady_clock::now() < until) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+      }
+      drain = true;
+    });
+
+  const std::string name = "an_event_with_a_name_long_enough_to_fill_the_pipe_soon";
+  int registered = 0;
+  {
+    yaets::TraceSession session(path);
+
+    // 1. Fill the pipe, until the consumer is certainly blocked writing it: far more registered
+    // than the pipe holds, and what it holds no longer changes. (A full pipe may hold a bit less
+    // than its nominal capacity: Linux fills it by pages.)
+    const auto line_bytes = static_cast<int>(name.size()) + 5;  // "<name> 1 2\n"
+    const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(2);
+    int last_pending = -1;
+    auto stable_since = std::chrono::steady_clock::now();
+    bool consumer_blocked = false;
+    while (!consumer_blocked && !drain && std::chrono::steady_clock::now() < deadline) {
+      for (int i = 0; i < 100; ++i, ++registered) {
+        session.register_trace(name, std::chrono::nanoseconds(1), std::chrono::nanoseconds(2));
+      }
+      std::this_thread::sleep_for(std::chrono::milliseconds(1));
+      const int pending = pending_in_pipe();
+      if (pending != last_pending) {
+        last_pending = pending;
+        stable_since = std::chrono::steady_clock::now();
+      }
+      consumer_blocked = pending > 0 && registered * line_bytes > 2 * capacity &&
+        std::chrono::steady_clock::now() - stable_since > std::chrono::milliseconds(100);
+    }
+    // Not ASSERT: the helper threads must always be joined.
+    consumer_blocked = consumer_blocked && !drain;
+    EXPECT_TRUE(consumer_blocked) << "registering waited for the file, or the pipe never filled";
+
+    // 2. With the consumer blocked, registering must not wait for it.
+    if (consumer_blocked) {
+      const auto start = std::chrono::steady_clock::now();
+      for (int i = 0; i < 1000; ++i, ++registered) {
+        session.register_trace(name, std::chrono::nanoseconds(1), std::chrono::nanoseconds(2));
+      }
+      const auto elapsed = std::chrono::steady_clock::now() - start;
+      EXPECT_FALSE(drain.load()) << "registering waited for the file";
+      EXPECT_LT(elapsed, std::chrono::seconds(1));
+    }
+
+    drain = true;
+    session.stop();
+  }
+  drainer.join();
+  watchdog.join();
+  close(reader);
+  EXPECT_EQ(read_lines, registered);
+  std::remove(path.c_str());
+}
+#endif
 
 int main(int argc, char ** argv)
 {

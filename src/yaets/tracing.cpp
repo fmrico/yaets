@@ -44,7 +44,11 @@ void
 TraceSession::stop()
 {
   if (running) {
-    running = false;
+    {
+      // Under the mutex, so the consumer cannot miss the wake-up.
+      std::lock_guard<std::mutex> lock(queue_mutex);
+      running = false;
+    }
     cv.notify_all();
     if (consumer_thread.joinable()) {
       consumer_thread.join();
@@ -75,20 +79,28 @@ void
 TraceSession::trace_consumer()
 {
   std::ofstream trace_file(filename_);
+  std::queue<TraceEvent> batch;
 
-  while (running || !trace_queue.empty()) {
-    std::unique_lock<std::mutex> lock(queue_mutex);
-    cv.wait(lock, [this] {return !trace_queue.empty() || !running;});
+  while (true) {
+    {
+      // The mutex is only held to take the pending events: whoever registers a trace (e.g. a
+      // real-time thread) never waits for the file to be written.
+      std::unique_lock<std::mutex> lock(queue_mutex);
+      cv.wait(lock, [this] {return !trace_queue.empty() || !running;});
+      if (trace_queue.empty()) {
+        break;  // Stopped, and nothing left to write.
+      }
+      std::swap(batch, trace_queue);
+    }
 
-    while (!trace_queue.empty()) {
-      TraceEvent event = trace_queue.front();
-      trace_queue.pop();
-
+    while (!batch.empty()) {
+      const TraceEvent & event = batch.front();
       trace_file << event.trace_name
                  << " " << event.start_time.count()
                  << " " << event.end_time.count() << "\n";
-      trace_file.flush();
+      batch.pop();
     }
+    trace_file.flush();  // Once per batch, so readers (e.g. a TUI) see recent events.
   }
 
   trace_file.close();
