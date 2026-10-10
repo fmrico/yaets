@@ -24,6 +24,7 @@
 
 #include <algorithm>
 #include <atomic>
+#include <cstdint>
 #include <cstdio>
 #include <fstream>
 #include <string>
@@ -203,7 +204,7 @@ TEST(yaets, EventsFromSeveralThreadsAreAllWritten) {
   }
   std::ifstream file(path);
   std::string name;
-  long long start = 0, end = 0;
+  int64_t start = 0, end = 0;
   int count = 0;
   while (file >> name >> start >> end) {
     ++count;

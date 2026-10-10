@@ -16,6 +16,7 @@
 #define YAETS__TRACING_HPP_
 
 #include <chrono>
+#include <cstdint>
 #include <string>
 #include <mutex>
 #include <queue>
@@ -24,6 +25,7 @@
 #include <atomic>
 #include <unordered_map>
 #include <memory>
+#include <vector>
 
 namespace yaets
 {
@@ -222,7 +224,7 @@ protected:
 class NamedSharedTrace
 {
 public:
-  static const size_t TRACE_SIZE_INIT = 100; ///< Initial size for the start_times_ vector.
+  static const size_t TRACE_SIZE_INIT = 100;  ///< Initial size for the start_times_ vector.
 
   /**
    * @brief Construct a new NamedSharedTrace object.
@@ -253,12 +255,13 @@ public:
 private:
   TraceSession & session_;                        ///< Reference to the associated TraceSession.
   std::string trace_name_;                        ///< The name of the traced event.
-  std::vector<std::chrono::nanoseconds> start_times_; ///< Stores start times for trace events.
+  std::vector<std::chrono::nanoseconds> start_times_;  ///< Stores start times for trace events.
 
   std::atomic<size_t> counter_push_;              ///< Tracks the number of start events.
   std::atomic<size_t> counter_pop_;               ///< Tracks the number of end events.
   size_t elements_;                               ///< Current number of elements in start_times_.
-  std::mutex trace_mutex_;                        ///< Mutex to ensure thread-safe operations on start_times_.
+  /// Mutex to ensure thread-safe operations on start_times_.
+  std::mutex trace_mutex_;
 };
 
 
@@ -318,8 +321,9 @@ public:
   void endTrace(const std::string & id);
 
 private:
-  std::unordered_map<std::string, std::unique_ptr<NamedSharedTrace>> traces_; ///< Stores traces by unique ID.
-  std::mutex mutex_; ///< Mutex for synchronizing access to the trace map.
+  /// Stores traces by unique ID.
+  std::unordered_map<std::string, std::unique_ptr<NamedSharedTrace>> traces_;
+  std::mutex mutex_;  ///< Mutex for synchronizing access to the trace map.
 
   // Private constructors for singleton pattern
   TraceRegistry() = default;

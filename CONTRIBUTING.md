@@ -59,3 +59,19 @@ Signed-off-by: Sofforus Jones <sjones@gmail.com>
 The DCO text can either be manually added to your commit body, or you can add either `-s` or `--signoff` to your usual Git commit commands. If you forget to add the sign-off you can also amend a previous commit with the sign-off by running `git commit --amend -s`. If you’ve pushed your changes to GitHub already you’ll need to force push your branch after this with `git push -f`.
 
 Note: The name and email address of the account you use to submit your PR must match the name and email address on the Signed-off-by line in your commit message.
+
+## License
+
+Any contribution that you make to this repository will
+be under the Apache 2 License, as dictated by that
+[license](http://www.apache.org/licenses/LICENSE-2.0.html):
+
+~~~
+5. Submission of Contributions. Unless You explicitly state otherwise,
+   any Contribution intentionally submitted for inclusion in the Work
+   by You to the Licensor shall be under the terms and conditions of
+   this License, without any additional terms or conditions.
+   Notwithstanding the above, nothing herein shall supersede or modify
+   the terms of any separate license agreement you may have executed
+   with Licensor regarding such Contributions.
+~~~
